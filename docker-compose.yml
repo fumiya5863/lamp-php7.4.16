@@ -1,0 +1,47 @@
+version: '3.8'
+
+services: 
+  php:
+    build: 
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: lamp_php
+    depends_on: 
+      - mysql
+    restart: always
+    ports: 
+      - 80:80
+    volumes: 
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./htdocs:/var/www/html
+      - ./apache/apache2.conf:/etc/apache2/apache2.conf
+  mysql: 
+    image: mariadb:10.4.18
+    container_name: lamp_mysql
+    environment: 
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - TZ=Asia/Tokyo
+    restart: always
+    ports: 
+      - 3306:3306
+    volumes: 
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: lamp_phpmyadmin
+    depends_on: 
+      - mysql
+    environment: 
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    restart: always
+    ports: 
+      - 8080:80
+    volumes: 
+      - ./phpmyadmin/sessions:/sessions
