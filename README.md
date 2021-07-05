@@ -19,5 +19,5 @@ cd lamp-php7.4.16
 docker-compose up -d
 ```
 
-## 著書
+## 著者
 [fumiya5863](https://github.com/fumiya5863)
